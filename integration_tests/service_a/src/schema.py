@@ -1,5 +1,5 @@
 from graphene import ObjectType, String, Int, List, NonNull, Field
-from graphene_federation import build_schema, extend, external, key
+from graphene_federation import build_schema, extend, external
 
 
 @extend(fields='id')
@@ -17,7 +17,6 @@ class Message(ObjectType):
         return [FileNode(id=self.thread_id * 3)]
 
 
-@key(fields='id')
 class Thread(ObjectType):
     id = Int(required=True)
     messages = List(NonNull(Message))
