@@ -1,0 +1,59 @@
+version: '2.1'
+services:
+  service_a:
+    build: service_a/.
+    volumes:
+      - ./service_a/src:/project/src
+    command: sh -c "python ./src/app.py"
+    ports:
+      - 3001:5000
+    healthcheck:
+      test: ["CMD", "curl", "-XGET", "http://0.0.0.0:5000/graphql"]
+      interval: 1s
+      timeout: 10s
+      retries: 10
+
+  service_b:
+    build: service_b/.
+    volumes:
+      - ./service_b/src:/project/src
+    command: sh -c "python ./src/app.py"
+    ports:
+      - 3002:5000
+    healthcheck:
+      test: ["CMD", "curl", "-XGET", "http://0.0.0.0:5000/graphql"]
+      interval: 1s
+      timeout: 10s
+      retries: 10
+
+  service_c:
+    build: service_c/.
+    volumes:
+      - ./service_c/src:/project/src
+    command: sh -c "python ./src/app.py"
+    ports:
+      - 3003:5000
+    healthcheck:
+      test: ["CMD", "curl", "-XGET", "http://0.0.0.0:5000/graphql"]
+      interval: 1s
+      timeout: 10s
+      retries: 10
+
+  federation:
+    build: federation/.
+    volumes:
+      - ./federation/src:/project/src
+    ports:
+      - 3000:3000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "-XGET", "http://localhost:3000/.well-known/apollo/server-health"]
+      interval: 3s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      service_a:
+        condition: service_healthy
+      service_b:
+        condition: service_healthy
+      service_c:
+        condition: service_healthy

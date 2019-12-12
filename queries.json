@@ -1,0 +1,66 @@
+query {
+  thread(id: 1){
+     messages{
+      id
+      threadId
+      text
+      files{
+        id
+        url
+      }
+    }
+  }
+}
+
+==============================
+query {
+  _service{
+    sdl
+  }
+}
+
+================================
+query ($_representations: [_Any!]!) {
+  _entities(representations: $_representations) {
+    ... on FileNode {
+      id
+      url
+    }
+  }
+}
+
+{"_representations": [
+      {
+        "__typename": "FileNode",
+        "id": 1
+      }
+    ]
+}
+
+============================
+query {
+  thread(id: 5){
+    id
+     creds{
+      token
+    }
+  }
+}
+=============================
+query ($_representations: [_Any!]!) {
+  _entities(representations: $_representations) {
+    ... on Thread {
+      creds {
+        token
+      }
+    }
+  }
+}
+
+{"_representations": [
+      {
+        "__typename": "Thread",
+        "id": 3
+      }
+    ]
+}
