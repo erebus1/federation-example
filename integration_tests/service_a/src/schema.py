@@ -11,7 +11,7 @@ class Message(ObjectType):
     id = Int(required=True)
     thread_id = Int(required=True)
     text = String(required=True)
-    files = List(NonNull(FileNode))
+    files = List(NonNull(FileNode), required=True)
 
     def resolve_files(self, info):
         return [FileNode(id=self.thread_id * 3)]
